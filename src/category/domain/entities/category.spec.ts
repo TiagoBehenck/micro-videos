@@ -76,16 +76,18 @@ describe('Category Unit Tests', () => {
     data.forEach(i => {
       const category = new Category(i.props, i.id)
       expect(category.id).not.toBeNull()
-      expect(category.id).toBeInstanceOf(UniqueEntityId)
+      expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId)
     })
   })
 
-  test('getter of name field', () => {
+  test('getter and setter of name field', () => {
     const category = new Category({
       name: 'Movie'
     })
-
     expect(category.name).toBe('Movie')
+
+    category["name"] = "other name"
+    expect(category.name).toBe("other name")
   })
 
   test('getter and setter of description field', () => {
@@ -137,5 +139,24 @@ describe('Category Unit Tests', () => {
       created_at
     })
     expect(category.created_at).toBe(created_at)
+  })
+
+  test('update name and description by method', () => {
+    const obj = new Category({ name: 'Test name', description: 'Test description' })
+
+    obj.update('new name', 'new description')
+
+    expect(obj.name).toBe('new name')
+    expect(obj.description).toBe('new description')
+  })
+
+  test('active and desactive the category', () => {
+    let category = new Category({ name: 'Test name', is_active: false })
+
+    category.activate()
+    expect(category.is_active).toBeTruthy()
+
+    category.desactivate()
+    expect(category.is_active).toBeFalsy()
   })
 });
